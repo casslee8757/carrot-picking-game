@@ -69,8 +69,8 @@ button {
     border: var(--border--medium);
     font-size: var(--font--large);
     margin-top: 8px;
-    border-radius: var(--border--radius)
-
+    border-radius: var(--border--radius);
+    visibility: hidden;
 
 }
 
@@ -85,6 +85,8 @@ button {
     border: var(--border--small);
     background-color: var(--color--darksalmon);
     color: var(--color--white);
+    visibility: hidden;
+
 }
 
 .game__field {

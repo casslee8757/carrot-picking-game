@@ -1,18 +1,71 @@
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
+const GAME_DURATION_SEC = 5;
 
 const field = document.querySelector('.game__field')
 const fieldRect = field.getBoundingClientRect();
 const gameBtn = document.querySelector('.game__button')
-const gameTimer = document.querySelector('.game__score')
+const gameTimer = document.querySelector('.game__timer')
+const gameScore = document.querySelector('.game__score')
 
 let started = false;
 let score = 0;
 let timer = undefined;
 
+gameBtn.addEventListener('click', () => {
+    console.log('log');
+    if(started){
+        stopGame()
+    }else{
+        startGame()
+    }
+    started = !started;
+});
+
+const startGame = () => {
+    initGame()
+    showStopButton()
+    showTimerAndScore()
+    startGameTimer()
+}
+
+const stopGame = () => {
+
+}
+
+const showStopButton = () => {
+    const icon = gameBtn.querySelector('.fa-play');
+    icon.classList.add('fa-stop');
+    icon.classList.remove('fa-play');
+}
+
+const showTimerAndScore = () => {
+    gameTimer.style.visibility = 'visible'
+    gameScore.style.visibility = 'visible'
+}
+
+const startGameTimer = () => {
+    let remainingTimeSec = GAME_DURATION_SEC;
+    updateTimerText(remainingTimeSec);
+    timer = setInterval( () => {
+        if(remainingTimeSec <= 0){
+            clearInterval(timer)
+            return;
+        }
+        updateTimerText(--remainingTimeSec)
+    }, 1000 )
+}
+
+const updateTimerText = (time) => {
+    const minutes = Math.floor(time / 60)
+    const seconds = time % 60;
+    gameTimer.innerText = `${minutes}:${seconds}`
+}
+
 const initGame = () => {
-    console.log(fieldRect);
+    field.innerHTML = '';
+    gameScore.innerText = CARROT_COUNT
     addItem('carrot', CARROT_COUNT, 'img/carrot.png')
     addItem('bug', BUG_COUNT, 'img/bug.png')
 }
@@ -39,5 +92,3 @@ const addItem = (className, count, imgPath) => {
 const randomNumber = (min, max) => {
     return Math.random() * (max - min) + min;
 }
-
-initGame()
