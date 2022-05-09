@@ -12,9 +12,12 @@ const popUp = document.querySelector('.pop-up')
 const popUpText = document.querySelector('.pop-up__message')
 const popUpRefresh = document.querySelector('.pop-up__refresh')
 
+const carrotSound = new Audio()
 let started = false;
 let score = 0;
 let timer = undefined;
+
+field.addEventListener('click', (ev) => onFieldClick(ev))
 
 gameBtn.addEventListener('click', () => {
     console.log('log');
@@ -26,7 +29,13 @@ gameBtn.addEventListener('click', () => {
     started = !started;
 });
 
+popUpRefresh.addEventListener('click', () => {
+    startGame()
+    hidePopUp()
+})
+
 const startGame = () => {
+    started = true;
     initGame()
     showStopButton()
     showTimerAndScore()
@@ -34,13 +43,20 @@ const startGame = () => {
 }
 
 const stopGame = () => {
+    srated = false;
     stopGameTimer()
     hideStartButton()
     showPopUpWithText('REPLAY?')
 }
 
+const finishGame = win => {
+    started = false;
+    hideStartButton();
+    showPopUpWithText(win? 'YOU WON!' : 'YOU LOST')
+}
+
 const showStopButton = () => {
-    const icon = gameBtn.querySelector('.fa-play');
+    const icon = gameBtn.querySelector('.fas');
     icon.classList.add('fa-stop');
     icon.classList.remove('fa-play');
 }
@@ -60,6 +76,7 @@ const startGameTimer = () => {
     timer = setInterval( () => {
         if(remainingTimeSec <= 0){
             clearInterval(timer)
+            finishGame(CARROT_COUNT === score)
             return;
         }
         updateTimerText(--remainingTimeSec)
@@ -74,22 +91,49 @@ const updateTimerText = (time) => {
 
 const stopGameTimer = () => {
     clearInterval(timer)
-
-    // popUp.style.display = 'block'
 }
 
 const showPopUpWithText = (text) => {
     popUpText.innerHTML = text;
     popUp.classList.remove('pop-up--hide')
+    // if(clicked){
+
+    // }
+    // gameRefresh()
 }
 
-
+const hidePopUp = () => {
+    popUp.classList.add('pop-up--hide')
+}
 
 const initGame = () => {
     field.innerHTML = '';
     gameScore.innerText = CARROT_COUNT
     addItem('carrot', CARROT_COUNT, 'img/carrot.png')
     addItem('bug', BUG_COUNT, 'img/bug.png')
+}
+
+const onFieldClick = event => {
+    if(!started){
+        return
+    }
+    const target = event.target;
+    if(target.matches('.carrot')){
+        target.remove()
+        score++
+        updateScoreBoard()
+        if(score === CARROT_COUNT){
+            finishGame(true);
+        }
+    }else if(target.matches('.bug')){
+        stopGameTimer(); 
+        finishGame(false)
+    }
+}
+
+
+const updateScoreBoard = () => {
+    gameScore.innerText = CARROT_COUNT - score;
 }
 
 const addItem = (className, count, imgPath) => {
