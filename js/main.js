@@ -12,7 +12,12 @@ const popUp = document.querySelector('.pop-up')
 const popUpText = document.querySelector('.pop-up__message')
 const popUpRefresh = document.querySelector('.pop-up__refresh')
 
-const carrotSound = new Audio()
+const carrotSound = new Audio('./sound/carrot_pull.mp3')
+const alertSound = new Audio('./sound/alert.wav')
+const bgSound = new Audio('./sound/bg.mp3')
+const bugSound = new Audio('./sound/bug_pull.mp3')
+const winSound = new Audio('./sound/game_win.mp3')
+
 let started = false;
 let score = 0;
 let timer = undefined;
@@ -20,13 +25,12 @@ let timer = undefined;
 field.addEventListener('click', (ev) => onFieldClick(ev))
 
 gameBtn.addEventListener('click', () => {
-    console.log('log');
     if(started){
         stopGame()
     }else{
         startGame()
     }
-    started = !started;
+    // started = !started;
 });
 
 popUpRefresh.addEventListener('click', () => {
@@ -40,18 +44,28 @@ const startGame = () => {
     showStopButton()
     showTimerAndScore()
     startGameTimer()
+    playSound(bgSound)
 }
 
 const stopGame = () => {
-    srated = false;
+    started = false;
     stopGameTimer()
     hideStartButton()
     showPopUpWithText('REPLAY?')
+    playSound(alertSound)
+    stopSound(bgSound)
 }
 
 const finishGame = win => {
     started = false;
     hideStartButton();
+    if(win){
+        playSound(winSound);
+    }else{
+        playSound(bugSound);
+    }
+    stopGameTimer(); 
+    stopSound(bgSound)
     showPopUpWithText(win? 'YOU WON!' : 'YOU LOST')
 }
 
@@ -96,10 +110,7 @@ const stopGameTimer = () => {
 const showPopUpWithText = (text) => {
     popUpText.innerHTML = text;
     popUp.classList.remove('pop-up--hide')
-    // if(clicked){
-
-    // }
-    // gameRefresh()
+   
 }
 
 const hidePopUp = () => {
@@ -107,6 +118,7 @@ const hidePopUp = () => {
 }
 
 const initGame = () => {
+    score = 0;
     field.innerHTML = '';
     gameScore.innerText = CARROT_COUNT
     addItem('carrot', CARROT_COUNT, 'img/carrot.png')
@@ -121,16 +133,25 @@ const onFieldClick = event => {
     if(target.matches('.carrot')){
         target.remove()
         score++
+        playSound(carrotSound)
         updateScoreBoard()
         if(score === CARROT_COUNT){
+
             finishGame(true);
         }
     }else if(target.matches('.bug')){
-        stopGameTimer(); 
         finishGame(false)
     }
 }
 
+const playSound = sound => {
+    sound.currentTime = 0;
+    sound.play()
+}
+
+const stopSound = sound => {
+    sound.pause()
+}
 
 const updateScoreBoard = () => {
     gameScore.innerText = CARROT_COUNT - score;
