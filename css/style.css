@@ -18,6 +18,7 @@
 body {
     text-align: center;
     font-family: 'Oleo Script', cursive;
+    background-color: black;
 }
 
 button {
@@ -71,6 +72,8 @@ button {
     margin-top: 8px;
     border-radius: var(--border--radius);
     visibility: hidden;
+    user-select: none;
+    cursor: auto;
 
 }
 
@@ -86,6 +89,8 @@ button {
     background-color: var(--color--darksalmon);
     color: var(--color--white);
     visibility: hidden;
+    user-select: none;
+    cursor: auto;
 
 }
 
@@ -129,4 +134,14 @@ button {
     display: block;
     font-size: var(--font--large);
 
+}
+
+.carrot,
+.bug {
+    transition: tranform 100ms ease-in;
+}
+
+.carrot:hover,
+.bug:hover {
+    transform: scale(1.1)
 }
