@@ -8,6 +8,9 @@ const fieldRect = field.getBoundingClientRect();
 const gameBtn = document.querySelector('.game__button')
 const gameTimer = document.querySelector('.game__timer')
 const gameScore = document.querySelector('.game__score')
+const popUp = document.querySelector('.pop-up')
+const popUpText = document.querySelector('.pop-up__message')
+const popUpRefresh = document.querySelector('.pop-up__refresh')
 
 let started = false;
 let score = 0;
@@ -31,13 +34,19 @@ const startGame = () => {
 }
 
 const stopGame = () => {
-
+    stopGameTimer()
+    hideStartButton()
+    showPopUpWithText('REPLAY?')
 }
 
 const showStopButton = () => {
     const icon = gameBtn.querySelector('.fa-play');
     icon.classList.add('fa-stop');
     icon.classList.remove('fa-play');
+}
+
+const hideStartButton = () => {
+    gameBtn.style.visibility = 'hidden'
 }
 
 const showTimerAndScore = () => {
@@ -62,6 +71,19 @@ const updateTimerText = (time) => {
     const seconds = time % 60;
     gameTimer.innerText = `${minutes}:${seconds}`
 }
+
+const stopGameTimer = () => {
+    clearInterval(timer)
+
+    // popUp.style.display = 'block'
+}
+
+const showPopUpWithText = (text) => {
+    popUpText.innerHTML = text;
+    popUp.classList.remove('pop-up--hide')
+}
+
+
 
 const initGame = () => {
     field.innerHTML = '';
