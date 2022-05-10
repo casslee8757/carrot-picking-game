@@ -29,7 +29,7 @@ button {
 .game {
     display: flex;
     flex-direction: column;
-    background: url("img/background.png") center/cover;
+    background: url("https://pbs.twimg.com/media/FSX4_djaAAA6Gkq?format=jpg&name=4096x4096") center/cover;
     /* min-height:100%;
     min-width: 1024px; */
     /* width: 100%;
