@@ -108,7 +108,7 @@ button {
     height: 140px;
     padding: 20px;
     margin: auto;
-    opacity: 0.7;
+    opacity: 0.9;
     background-color: #00000090;
     border-radius: var(--border--radius);
     color: var(--color--white); 
