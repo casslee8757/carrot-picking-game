@@ -1,13 +1,16 @@
 import PopUp from './popup.js';
-import Game from './game.js'
+import GameBuilder from './game.js'
 
 
 
 
 const gameFinishBanner = new PopUp()
+const game = new GameBuilder()
+    .gameDuration(5)
+    .carrotCount(3)
+    .bugCount(3)
+    .build()
 
-
-const game = new Game(3, 3, 3);
 game.setGameStopListener( (reason) => {
     console.log(reason);
     let message;
