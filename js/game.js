@@ -3,17 +3,17 @@ import * as sound from  './sound.js'
 
 //Builder Pattern
 export default class GameBuilder {
-    gameDuration(duration) {
+    withGameDuration(duration) {
         this.gameDuration = duration;
         return this;
     }
 
-    carrotCount(num){
+    withCarrotCount(num){
         this.carrotCount = num;
         return this;
     }
 
-    bugCount(num){
+    withBugCount(num){
         this.bugCount = num;
         return this;
     }
