@@ -1,4 +1,4 @@
-import Field from './field.js';
+import { Field, ItemType } from './field.js';
 import * as sound from  './sound.js'
 
 export const Reason = Object.freeze({
@@ -45,14 +45,14 @@ class Game {
 
         this.gameBtn.addEventListener('click', () => {
             if(this.started){
-                this.stop()
+                this.stop(Reason.cancel)
             }else{
                 this.start()
             }
         });
 
-        this.gameField = new Field(carrotCount, bugCount)
-        this.gameField.setClickListener(this.onItemClick)
+        this.field = new Field(carrotCount, bugCount)
+        this.field.setClickListener(this.onItemClick)
 
         this.started = false;
         this.score = 0;
@@ -64,7 +64,7 @@ class Game {
         this.onGameStop = onGameStop;
     }
 
-    start = () => {
+    start() {
         this.started = true;
         this.initGame()
         this.showStopButton()
@@ -73,93 +73,84 @@ class Game {
         sound.playBackground()
     }
     
-    stop = () => {
+    stop(reason) {
         this.started = false;
         this.stopGameTimer()
         this.hideStartButton()
-        sound.playAlert()
         sound.stopBackground()
-        this.onGameStop && this.onGameStop(Reason.cancel)
+        this.onGameStop && this.onGameStop(reason)
     }
 
-    finish = win => {
-        this.started = false;
-        this.hideStartButton();
-        if(win){
-            sound.playWin()
-        }else{
-            sound.playBug()
-        }
-        this.stopGameTimer(); 
-        sound.stopBackground()
-        this.onGameStop && this.onGameStop(win? Reason.win : Reason.lose)
 
-    }
-
-    onItemClick = (item) => {
+    onItemClick(item) {
         if(!this.started) {
             return;
         }
     
-        if(item === 'carrot'){
+        if(item === ItemType.carrot){
             this.score++;
             this.updateScoreBoard();
             if(this.score === this.carrotCount){
-                this.finish(true)
+                this.stop(Reason.win)
             }
-        }else if(item === 'bug'){
-            this.finish(false)
+        }else{
+            this.stop(Reason.lose)
                 
         }
     }
 
-    showStopButton = () => {
+    showStopButton() {
         const icon = this.gameBtn.querySelector('.fas');
         icon.classList.add('fa-stop');
         icon.classList.remove('fa-play');
         this.gameBtn.style.visibility = 'visible'
     }
     
-    hideStartButton = () => {
+    hideStartButton() {
         this.gameBtn.style.visibility = 'hidden'
     }
     
-    showTimerAndScore = () => {
+    showTimerAndScore() {
         this.gameTimer.style.visibility = 'visible'
         this.gameScore.style.visibility = 'visible'
     }
     
-    startGameTimer = () => {
+    startGameTimer() {
         let remainingTimeSec = this.gameDuration
         this.updateTimerText(remainingTimeSec);
+
         this.timer = setInterval( () => {
             if(remainingTimeSec <= 0){
                 clearInterval(this.timer)
-                this.finish(this.carrotCount === this.score)
+
+                if(this.started){
+                    this.stop(this.score === this.carrotCount ? Reason.win : Reason.lose)
+
+                }
                 return;
             }
             this.updateTimerText(--remainingTimeSec)
         }, 1000 )
     }
     
-    updateTimerText = (time) => {
+    updateTimerText(time) {
         const minutes = Math.floor(time / 60)
         const seconds = time % 60;
         this.gameTimer.innerText = `${minutes}:${seconds}`
     }
     
-    stopGameTimer = () => {
+    stopGameTimer() {
         clearInterval(this.timer)
     }
     
-    initGame = () => {
+    initGame() {
         this.score = 0;
         this.gameScore.innerText = this.carrotCount;
-        this.gameField.init();
+        this.field.init();
         
     }
     
-    updateScoreBoard = () => {
+    updateScoreBoard() {
         this.gameScore.innerText = this.carrotCount - this.score;
     }
     
