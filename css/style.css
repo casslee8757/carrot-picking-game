@@ -125,7 +125,7 @@ button {
     height: 60px;
     border: 2px solid black;
     border-radius: 50%;
-    transition: tranform var(--animation-duration) ease-in;
+    transition: transform var(--animation-duration) ease-in;
      
 }
 
