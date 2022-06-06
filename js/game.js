@@ -39,6 +39,9 @@ class Game {
         this.carrotCount = carrotCount;
         this.bugCount = bugCount;
 
+        this.field = new Field(carrotCount, bugCount)
+        this.field.setClickListener(item => this.onItemClick(item))
+
         this.gameBtn = document.querySelector('.game__button')
         this.gameTimer = document.querySelector('.game__timer')
         this.gameScore = document.querySelector('.game__score')
@@ -51,8 +54,7 @@ class Game {
             }
         });
 
-        this.field = new Field(carrotCount, bugCount)
-        this.field.setClickListener(this.onItemClick)
+       
 
         this.started = false;
         this.score = 0;
@@ -89,11 +91,12 @@ class Game {
     
         if(item === ItemType.carrot){
             this.score++;
-            this.updateScoreBoard();
+            this.updateScoreBoard(this.score);
+            
             if(this.score === this.carrotCount){
                 this.stop(Reason.win)
             }
-        }else{
+        }else if(item === ItemType.bug){
             this.stop(Reason.lose)
                 
         }

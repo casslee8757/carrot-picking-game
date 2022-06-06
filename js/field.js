@@ -14,21 +14,22 @@ export class Field {
         this.bugCount = bugCount;
         this.field = document.querySelector('.game__field')
         this.fieldRect = this.field.getBoundingClientRect();
-        this.field.addEventListener('click', this.onClick)
+        this.onFieldClickListener = this.onFieldClickListener.bind(this);
+        this.field.addEventListener('click', this.onFieldClickListener);
 
     }
 
     init() {
         this.field.innerHTML = '';
-        this._addItem('carrot', this.carrotCount, 'img/carrot.png')
-        this._addItem('bug', this.bugCount, 'img/bug.png')
+        this.addItem('carrot', this.carrotCount, 'img/carrot.png')
+        this.addItem('bug', this.bugCount, 'img/bug.png')
     }
 
     setClickListener(onItemClick){
         this.onItemClick = onItemClick
     }
 
-    _addItem(className, count, imgPath){
+    addItem(className, count, imgPath){
         const x1 = 0;
         const y1 = 0;
         const x2 = this.fieldRect.width - CARROT_SIZE;
@@ -46,13 +47,13 @@ export class Field {
             
         }
     }
-    onClick = (event) => {
+    onFieldClickListener(event) {
         const target = event.target;
         if(target.matches('.carrot')){
             target.remove()
             sound.playCarrot()
             this.onItemClick && this.onItemClick(ItemType.carrot)
-        }else if(target.matches('bug')){
+        }else if(target.matches('.bug')){
             this.onItemClick && this.onItemClick(ItemType.bug)
             
         }

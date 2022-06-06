@@ -8,16 +8,13 @@ export function playCarrot(){
     playSound(carrotSound);
 }
 
-
 export function playBug(){
     playSound(bugSound);
 }
 
-
 export function playAlert(){
     playSound(alertSound);
 }
-
 
 export function playWin(){
     playSound(winSound);
