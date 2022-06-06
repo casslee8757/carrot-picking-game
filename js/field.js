@@ -16,6 +16,7 @@ export class Field {
         this.fieldRect = this.field.getBoundingClientRect();
         this.onFieldClickListener = this.onFieldClickListener.bind(this);
         this.field.addEventListener('click', this.onFieldClickListener);
+        this.interval = undefined
 
     }
 
@@ -39,14 +40,24 @@ export class Field {
             item.setAttribute('class', className);
             item.setAttribute('src', imgPath);
             item.style.position = 'absolute';
-            const x = randomNumber(x1, x2);
-            const y = randomNumber(y1, y2);
-            item.style.left = `${x}px`
-            item.style.top = `${y}px`
+            this.interval = setInterval( () => {
+                
+                const x = randomNumber(x1, x2);
+                const y = randomNumber(y1, y2);
+                item.style.left = `${x}px`
+                item.style.top = `${y}px`
+                
+            }, 1000 )
+            
             this.field.appendChild(item)
             
         }
     }
+
+    stopGameInterval(){
+        clearInterval(this.interval)
+    }
+
     onFieldClickListener(event) {
         const target = event.target;
         if(target.matches('.carrot')){
@@ -58,6 +69,8 @@ export class Field {
             
         }
     }
+
+
 }
 
 const randomNumber = (min, max) => {

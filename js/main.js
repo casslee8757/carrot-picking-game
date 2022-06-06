@@ -4,9 +4,9 @@ import { GameBuilder, Reason } from './game.js'
 
 const gameFinishBanner = new PopUp()
 const game = new GameBuilder()
-.withGameDuration(20)
-.withCarrotCount(20)
-.withBugCount(20)
+.withGameDuration(5)
+.withCarrotCount(3)
+.withBugCount(3)
 .build()
 
 game.setGameStopListener(reason => {
@@ -34,3 +34,5 @@ game.setGameStopListener(reason => {
 gameFinishBanner.setClickListener( () => {
     game.start()
 } )
+
+

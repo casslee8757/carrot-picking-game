@@ -54,8 +54,6 @@ class Game {
             }
         });
 
-       
-
         this.started = false;
         this.score = 0;
         this.timer = undefined;
@@ -81,6 +79,7 @@ class Game {
         this.hideStartButton()
         sound.stopBackground()
         this.onGameStop && this.onGameStop(reason)
+        this.field.stopGameInterval()
     }
 
 
